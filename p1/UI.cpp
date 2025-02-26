@@ -1,6 +1,5 @@
 #include "UI.h"
 #include <iostream>
-#include <conio.h>
 
 std::pair<size_t, size_t> UI::ReadMove() {
 	std::pair<size_t, size_t> move;
@@ -10,6 +9,17 @@ std::pair<size_t, size_t> UI::ReadMove() {
 	std::cin >> move.second;
 
 	return move;
+}
+
+int UI::ReadDifficulty() {
+	int dif;
+  std::cout << "What difficulty would you like to play with?" << std::endl;
+  std::cout << "1) Easy" << std::endl;
+  std::cout << "2) Medium" << std::endl;
+  std::cout << "3) Hard" << std::endl;
+	std::cin >> dif;
+
+	return dif;
 }
 
 void UI::PrintBoard(int(&state)[5][5]) {

@@ -4,7 +4,8 @@
 class UI {
 public:
 	void PrintBoard(int(&state)[5][5]);
-	std::pair<size_t, size_t> ReadMove();
+	std::pair<std::size_t, std::size_t> ReadMove();
+	int ReadDifficulty();
 
 private:
 	const unsigned int m_colWidth = 10;

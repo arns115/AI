@@ -1,9 +1,8 @@
 #include "UI.h"
-#include "Game.h"
+#include "Game1.h"
 
 int main() {
-	Game game;
+	Game1 game;
 	game.Start();
 
-	return 0;
 }
