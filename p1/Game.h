@@ -16,6 +16,7 @@ private:
 	UI m_gameUI;
 	int m_boardState[5][5];
 	int difficulty;
+	int who_starts;
 	long long player1;
 	long long player2;
 	long long state;

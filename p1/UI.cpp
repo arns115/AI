@@ -22,6 +22,17 @@ int UI::ReadDifficulty() {
 	return dif;
 }
 
+int UI::ReadStartingPlayer() {
+	int start;
+  std::cout << "Who starts?" << std::endl;
+  std::cout << "1) You" << std::endl;
+  std::cout << "2) Computer" << std::endl;
+	std::cin >> start;
+
+	return start;
+}
+
+
 void UI::PrintBoard(int(&state)[5][5]) {
 	for (unsigned int row = 1; row <= 4 * m_rowHeight; row++) {
 		for (unsigned int col = 1; col < 4 * m_colWidth; col++) {

@@ -86,8 +86,22 @@ int main(){
         best_move[identificator_of_state] = best_pos;
       }
     }
+  } 
+  map<ll, pair<int, int>> pos_to_coordinates;
+  int row = 1, column = 1;
+  for(int i = 0; i < 32; i++){
+    pos_to_coordinates[1LL << i] = {row, column};
+    column++;
+    if(column == 5){
+      column = 1;
+      row++;
+    }
+    if(row == 5){
+      row = column = 1;
+    }
   }
   for(auto [x, y]: best_move){
-    cout << x << " " << y << endl;
+    auto [best_row, best_column] = pos_to_coordinates[x ^ y];
+    cout << x << " " << best_row << " " << best_column << endl;
   } 
 }
