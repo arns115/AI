@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Rubik's Cube Solver</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="styles.css" />
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+		<script src="animation.js" defer></script>
+	</head>
+	<body>
+		<h1>Rubik's Cube Solver (AI)</h1>
+		<div class="options">
+			<div class="options__inputs">
+				<div class="input-group">
+					<label for="input_move-duration" class="input-group__label"
+						>Move duration (ms)</label
+					>
+					<input
+						id="input_move-duration"
+						class="input-group__input"
+						type="number"
+						value="500"
+					/>
+				</div>
+				<div class="input-group">
+					<label for="input_scramble-moves" class="input-group__label"
+						>Scramble moves</label
+					>
+					<input
+						id="input_scramble-moves"
+						class="input-group__input"
+						type="number"
+						value="30"
+					/>
+				</div>
+			</div>
+			<div class="options__buttons">
+				<button class="button" id="button_scramble">Scramble</button>
+				<button class="button" id="button_solve">Solve</button>
+				<button class="button" id="button_reset">Reset</button>
+			</div>
+		</div>
+	</body>
+</html>
