@@ -1,0 +1,148 @@
+*,
+*::after,
+*::before {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 62.5%;
+}
+
+:root {
+	--clr-white: #eeeeee;
+	--clr-green: #06d001;
+	--clr-red: #ff2929;
+	--clr-blue: #0d92f4;
+	--clr-yellow: #ffeb00;
+	--clr-orange: #ff6500;
+}
+
+body {
+	font-family: 'Poppins', sans-serif;
+	font-size: 2rem;
+	background: linear-gradient(
+		135deg,
+		rgba(57, 62, 64, 1) 0%,
+		rgba(34, 40, 49, 1) 78%
+	);
+	height: 100vh;
+	color: var(--clr-white);
+}
+
+input,
+button {
+	font: inherit;
+	border: none;
+	color: inherit;
+	border-radius: 0.8rem;
+	color: black;
+}
+
+input:focus {
+	outline: none;
+}
+
+h1 {
+	font-size: 4rem;
+	font-weight: 700;
+	text-align: center;
+	padding: 0.5em;
+}
+
+.button {
+	padding: 0.3em 1.2em;
+	background-color: #ffd369;
+	transition-property: background-color, translate;
+	transition-duration: 150ms;
+}
+
+.button:hover {
+	background-color: #ffc538;
+	box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.5);
+	translate: 0 -0.2rem;
+}
+
+.button:disabled {
+	pointer-events: none;
+	opacity: 0.5;
+}
+
+.input-group {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 1rem;
+}
+
+.input-group__label {
+}
+
+.input-group__input {
+	background-color: #f0f0f0;
+	border: 2px solid transparent;
+	text-align: center;
+	background-color: #222831;
+	color: var(--clr-white);
+}
+
+.input-group__input:focus {
+	border: 2px solid;
+}
+
+.options {
+	width: 100%;
+	max-width: 60rem;
+	margin-inline: auto;
+	margin-bottom: 2rem;
+}
+
+.options__inputs {
+	display: flex;
+	justify-content: center;
+	gap: 4rem;
+	margin-bottom: 2rem;
+}
+
+.options__buttons {
+	display: flex;
+	justify-content: center;
+	gap: 4rem;
+}
+
+.options__buttons > .button {
+	flex: 1;
+}
+
+canvas {
+	margin-inline: auto;
+	border-radius: 2rem;
+}
+
+@keyframes color-change {
+	0% {
+		background-color: var(--clr-green);
+	}
+
+	20% {
+		background-color: var(--clr-blue);
+	}
+
+	40% {
+		background-color: var(--clr-yellow);
+	}
+
+	60% {
+		background-color: var(--clr-orange);
+	}
+
+	80% {
+		background-color: var(--clr-red);
+	}
+
+	100% {
+		background-color: var(--clr-green);
+	}
+}
