@@ -327,6 +327,18 @@ int heuristic(const vector<int> &cur, const vector<int> &initial_cube) {
   return res;
 }
 
+vector<string> split(const string& str, char delimiter) {
+  vector<string> result;
+  stringstream ss(str);
+  string tmp;
+
+
+  // cout << "split: " << cin>>
+  while (getline(ss, tmp, delimiter)) result.push_back(tmp);
+
+  return result;
+}
+
 int main() {
   vector<int> initial_state(54);
   for (int i = 0; i < 9; ++i) initial_state[i] = 0;    // Front face
@@ -337,16 +349,15 @@ int main() {
   for (int i = 45; i < 54; ++i) initial_state[i] = 5; // Down face
   vector<int> scrambled = initial_state;
 
-  freopen("input.in", "r", stdin);
-	freopen("output.out", "w", stdout);
+  // freopen("input.txt", "r", stdin);
 
-  int n; cin >> n;
-  vector<string> s(n);
-  for(int i = 0; i < n; i++){
-    cin >> s[i];
-  }
+  ifstream input("input.txt");
+  string n; 
+  std::getline(input, n);
+	freopen("output.txt", "w", stdout);
+  vector<string> s = split(n, ' ');
 
-  for(int i = 0; i < n; i++){
+  for(int i = 0; i < s.size(); i++){
     if(s[i] == "R"){
       scrambled = rotateRightClockwise(scrambled);
     }
@@ -412,10 +423,8 @@ int main() {
     cur = pre[cur].first;
   }
   reverse(sol.begin(), sol.end());
-  cout << (int)sol.size() << endl;
-  for(string rotation: sol){
-    cout << rotation << endl; 
-  }
+
+  for (string rotation:sol) cout << rotation << ' ';
 }
 
 
