@@ -2,6 +2,7 @@ const path = require('path');
 const { exec } = require('child_process');
 const express = require('express');
 const { writeToFile, readFromFile } = require('./utils');
+const fs = require('fs');
 
 const app = express();
 const port = 3000;
@@ -26,15 +27,25 @@ app.post('/scramble-moves', (req, res) => {
 
 app.get('/solve-moves', (req, res) => {
 	const filePath = path.join(__dirname, 'cpp');
-	exec(`${filePath}/solver.exe`, (error, stdout, stderr) => {
-		if (error) {
+
+	exec(`${filePath}/solver`, { cwd: filePath }, (error, stdout, stderr) => {
+    if (error) {
 			console.error(`exec error: ${error}`);
-			res.status(400).json({ status: 'error' });
-		}
+			console.error(`stderr: ${stderr}`);
+			return res.status(400).json({ status: 'error', message: 'C++ program failed' });
+    }
+
+    const outputFilePath = path.join(filePath, 'output.txt');
+    fs.readFile(outputFilePath, 'utf8', (err, data) => {
+			if (err) {
+				console.error(`File read error: ${err}`);
+				return res.status(500).json({ status: 'error', message: 'Failed to read output file' });
+			}
+			console.log('server moves:\n', data);
+			const moves = data.trim().split('\n');
+			res.status(200).json({ status: 'success', body: { moves } });
+    });
 	});
-	const moves = readFromFile(path.join(__dirname, 'cpp'), 'output.txt');
-	console.log('server moves: ', moves);
-	res.status(200).json({ staus: 'success', body: { moves } });
 });
 
 app.listen(port, () => {

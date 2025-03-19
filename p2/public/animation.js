@@ -255,10 +255,18 @@ async function getSolveMoves() {
 	try {
 		const response = await fetch('http://localhost:3000/solve-moves');
 		const res = await response.json();
-		const arr = res.body.moves.split('\n');
-		console.log(arr);
-		// executeMoves(res.body.moves);
-		scrambleButton.disabled = false;
+		
+		// Check the response in the frontend
+		console.log('Response from server:', res);
+
+		if (res.status === 'success') {
+			const moves = res.body.moves;
+			console.log('Moves from response:', moves);
+			executeMoves(moves.join(' '));  
+			resetButton.disabled = false;
+		} else {
+			console.error('Error: ', res.message);
+		}
 	} catch (e) {
 		console.error(`Couldn't retrieve solve moves: ${e}`);
 	}
@@ -282,6 +290,7 @@ resetButton.addEventListener('click', () => {
 		cubie.position.copy(cubie.userData.initialPosition);
 		cubie.rotation.copy(cubie.userData.initialRotation);
 	});
+	scrambleButton.disabled = false;
 });
 
 solveButton.addEventListener('click', () => {
