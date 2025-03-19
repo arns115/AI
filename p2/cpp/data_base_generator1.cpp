@@ -47,7 +47,7 @@ const vector<int> FRONT_FACE = {0, 1, 2, 3, 4, 5, 6, 7, 8};
 const vector<int> BACK_FACE = {9, 10, 11, 12, 13, 14, 15, 16, 17};
 const vector<int> RIGHT_FACE = {18, 19, 20, 21, 22, 23, 24, 25, 26};
 const vector<int> LEFT_FACE = {27, 28, 29, 30, 31, 32, 33, 34, 35};
-const vector<int> UP_FACE = {36, 37, 38, 39, 40, 41, 42, 43, 44};
+const vector<int> UP_FACE = {36, 37 ,38, 39, 40, 41, 42, 43, 44};
 const vector<int> DOWN_FACE = {45, 46, 47, 48, 49, 50, 51, 52, 53};
 
 // Rotate the front face clockwise and update adjacent faces
@@ -213,10 +213,12 @@ vector<int> rotateUpClockwise(vector<int> cube) {
   int temp10 = cube[27], temp11 = cube[28], temp12 = cube[29]; // Left face
 
   // Update adjacent faces
-  cube[0] = temp10; cube[1] = temp11; cube[2] = temp12; // Front face
-  cube[18] = temp1; cube[19] = temp2; cube[20] = temp3; // Right face
-  cube[9] = temp4; cube[10] = temp5; cube[11] = temp6; // Back face
-  cube[27] = temp7; cube[28] = temp8; cube[29] = temp9; // Left face
+  
+  // Update adjacent faces
+  cube[0] = temp4; cube[1] = temp5; cube[2] = temp6; // Front face
+  cube[18] = temp7; cube[19] = temp8; cube[20] = temp9; // Right face
+  cube[9] = temp10; cube[10] = temp11; cube[11] = temp12; // Back face
+  cube[27] = temp1; cube[28] = temp2; cube[29] = temp3; // Left face
 
   return cube;
 }
@@ -232,10 +234,10 @@ vector<int> rotateUpCounterClockwise(vector<int> cube) {
   int temp10 = cube[27], temp11 = cube[28], temp12 = cube[29]; // Left face
 
   // Update adjacent faces
-  cube[0] = temp4; cube[1] = temp5; cube[2] = temp6; // Front face
-  cube[18] = temp7; cube[19] = temp8; cube[20] = temp9; // Right face
-  cube[9] = temp10; cube[10] = temp11; cube[11] = temp12; // Back face
-  cube[27] = temp1; cube[28] = temp2; cube[29] = temp3; // Left face
+  cube[0] = temp10; cube[1] = temp11; cube[2] = temp12; // Front face
+  cube[18] = temp1; cube[19] = temp2; cube[20] = temp3; // Right face
+  cube[9] = temp4; cube[10] = temp5; cube[11] = temp6; // Back face
+  cube[27] = temp7; cube[28] = temp8; cube[29] = temp9; // Left face
 
   return cube;
 }
@@ -302,9 +304,19 @@ set<array<int, 4>> st;
 // function to calculate corner indexst
 int calc_corner_index(int X, int Y, int Z){
   int ind = (1 << X) + (1 << Y) + (1 << Z);
-  return ind;
-
+  if(ind == 25) return 0;
+  if(ind == 21) return 1;
+  if(ind == 41) return 2;
+  if(ind == 37) return 3;
+  if(ind == 22) return 4;
+  if(ind == 26) return 5;
+  if(ind == 38) return 6;
+  if(ind == 42) return 7;
+  //cout << ind << endl;
+  cout << X << " " << Y << " " << Z << endl;
+  return -1;
 }
+
 
 // function to calculate corner orientation
 //return 0, 1, 2 depending on the twists done to this corner
@@ -383,11 +395,28 @@ int main(){
   for(int i = 0; i < 54; i++){
     initial_state[i] = i;
   }
-  vector<int> scrambled = initial_state;
+  auto X = moves(initial_state);
+  // for(auto [moves, Y]: X){
+  //   for(int x: moves){
+  //     cout << x << " ";
+  //   }
+  //   cout << endl;
+  // }
+  // cout << endl;
+  // vector<int> scrambled = rotateFrontClockwise(initial_state);
+  // auto Y = moves(scrambled);
+  // for(auto [moves, Z]: Y){
+  //   for(int x: moves){
+  //     cout << x << " ";
+  //   }
+  //   cout << endl;
+  // }
+  // cout << endl;
   //scrambled = rotateUpClockwise(initial_state);
+  auto scrambled = rotateFrontClockwise(initial_state);
   scrambled = rotateUpCounterClockwise(scrambled);
   cout << (scrambled == initial_state) << endl;
-  vector<int> A, B;
+  vector<int> A, B, C;
   for(auto [x, y, z]: corner_triplets){
     A.push_back(calc_corner_index(initial_state[x] / 9, initial_state[y] / 9, initial_state[z] / 9));
   }
@@ -400,6 +429,7 @@ int main(){
   cout << endl;
   sort(A.begin(), A.end());
   sort(B.begin(), B.end());
+  sort(C.begin(), C.end());
   for(int i = 0; i < 8; i++){
     cout << A[i] << " ";
   }
@@ -410,6 +440,19 @@ int main(){
   cout << endl;
   for(int i = 0; i < 8; i++){
     cout << B[i] << " ";
+  }
+  cout << endl;
+  scrambled = rotateDownClockwise(scrambled);
+  for(auto [x, y, z]: corner_triplets){
+    C.push_back(calc_corner_index(scrambled[x] / 9, scrambled[y] / 9, scrambled[z] / 9));
+  }
+  for(int x: scrambled){
+    cout << x << " ";
+  }
+  cout << endl;
+  sort(C.begin(), C.end());
+  for(int i = 0; i < 8; i++){
+    cout << C[i] << " ";
   }
   cout << endl;
 }

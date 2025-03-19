@@ -47,7 +47,7 @@ const vector<int> FRONT_FACE = {0, 1, 2, 3, 4, 5, 6, 7, 8};
 const vector<int> BACK_FACE = {9, 10, 11, 12, 13, 14, 15, 16, 17};
 const vector<int> RIGHT_FACE = {18, 19, 20, 21, 22, 23, 24, 25, 26};
 const vector<int> LEFT_FACE = {27, 28, 29, 30, 31, 32, 33, 34, 35};
-const vector<int> UP_FACE = {36, 37, 38, 39, 40, 41, 42, 43, 44};
+const vector<int> UP_FACE = {36, 37 ,38, 39, 40, 41, 42, 43, 44};
 const vector<int> DOWN_FACE = {45, 46, 47, 48, 49, 50, 51, 52, 53};
 
 // Rotate the front face clockwise and update adjacent faces
@@ -213,10 +213,12 @@ vector<int> rotateUpClockwise(vector<int> cube) {
   int temp10 = cube[27], temp11 = cube[28], temp12 = cube[29]; // Left face
 
   // Update adjacent faces
-  cube[0] = temp10; cube[1] = temp11; cube[2] = temp12; // Front face
-  cube[18] = temp1; cube[19] = temp2; cube[20] = temp3; // Right face
-  cube[9] = temp4; cube[10] = temp5; cube[11] = temp6; // Back face
-  cube[27] = temp7; cube[28] = temp8; cube[29] = temp9; // Left face
+  
+  // Update adjacent faces
+  cube[0] = temp4; cube[1] = temp5; cube[2] = temp6; // Front face
+  cube[18] = temp7; cube[19] = temp8; cube[20] = temp9; // Right face
+  cube[9] = temp10; cube[10] = temp11; cube[11] = temp12; // Back face
+  cube[27] = temp1; cube[28] = temp2; cube[29] = temp3; // Left face
 
   return cube;
 }
@@ -232,10 +234,10 @@ vector<int> rotateUpCounterClockwise(vector<int> cube) {
   int temp10 = cube[27], temp11 = cube[28], temp12 = cube[29]; // Left face
 
   // Update adjacent faces
-  cube[0] = temp4; cube[1] = temp5; cube[2] = temp6; // Front face
-  cube[18] = temp7; cube[19] = temp8; cube[20] = temp9; // Right face
-  cube[9] = temp10; cube[10] = temp11; cube[11] = temp12; // Back face
-  cube[27] = temp1; cube[28] = temp2; cube[29] = temp3; // Left face
+  cube[0] = temp10; cube[1] = temp11; cube[2] = temp12; // Front face
+  cube[18] = temp1; cube[19] = temp2; cube[20] = temp3; // Right face
+  cube[9] = temp4; cube[10] = temp5; cube[11] = temp6; // Back face
+  cube[27] = temp7; cube[28] = temp8; cube[29] = temp9; // Left face
 
   return cube;
 }
@@ -310,7 +312,7 @@ int calc_corner_index(int X, int Y, int Z){
   if(ind == 38) return 6;
   if(ind == 42) return 7;
   //cout << ind << endl;
-  cout << X << " " << Y << " " << Z << endl;
+  //cout << X << " " << Y << " " << Z << endl;
   return -1;
 }
 
@@ -326,6 +328,7 @@ int calc_corner_orientation(int X, int Y, int Z, int X_solved){
   if(Z == X_solved){
     return 2;
   }
+  cout << -1 << endl;
   return -1;
 }
 
@@ -354,10 +357,10 @@ int calc_corners_index(const vector<int> cur){
   // get the corner orientations
   for(int i = 0; i < 7; i++){
     auto [x, y, z] = corner_triplets[i];
+    //cout << cur[x] << " " <<cur[y] << " " << cur[z] << endl;
     orientation_corners[i] = calc_corner_orientation(cur[x] / 9, cur[y] / 9, cur[z] / 9, corner_triplets[calc_corner_index(cur[x] / 9, cur[y] / 9, cur[z] / 9)][0] / 9);
   }
   // get the corresponding permutation
-
   for(auto [x, y, z]: corner_triplets){
     corner_permutation.push_back(calc_corner_index(cur[x] / 9, cur[y] / 9, cur[z] / 9));
    //cout << x << " " << y << " " << z << " " << corner_permutation.back() << endl;
@@ -389,43 +392,38 @@ int main(){
   for(int i = 0; i < 54; i++){
     initial_state[i] = i;
   }
-  vector<ll> factorial(15, 1);
   for(int i = 2; i < 15; i++){
     factorial[i] = factorial[i - 1] * i;
   }
-  queue<vector<int>> q;
-  q.push(initial_state);
+  queue<pair<vector<int>, int>> q;
+  q.push({initial_state, 0});
   vector<short> dist(88179845, -1);
-  dist[calc_corners_index(initial_state)] = 0;
+  dist[0] = 0;
   int cnt = 0;
   while((int)q.size()){
-    vector<int> cur = q.front();
+    auto [cur, d] = q.front();
     q.pop();
     if(cnt % 100000 == 0){
-      cout << cnt << " " << dist[calc_corners_index(cur)] << endl;
+      cout << cnt << " " << d << endl;
     }
-    //cout << cnt << " " << dist[calc_corners_index(cur)] << endl;
+    //cout << "AAAAAAA" << endl;
+    //cout << cnt << " " << d << endl;
     cnt++;
-    for(int x: cur){
-      cout << x << " ";
-    }
-    cout << endl;
-    auto c = calc_corners_index(cur);
     auto possible_moves = moves(cur);
     for(auto [move, r]: possible_moves){
       int index_corners_move = calc_corners_index(move);
-      cout << index_corners_move<< endl;
+      //cout << index_corners_move<< endl;
       if(index_corners_move == -1 || dist[index_corners_move] != -1){
         continue;
       }
-      dist[index_corners_move] = dist[c] + 1;
-      q.push(move);
+      dist[index_corners_move] = d + 1;
+      q.push({move, dist[index_corners_move]});
     }
   }
   cout << cnt << endl;
-  // freopen("data.txt", "r", stdin);
-  // cout << (int)dist.size() << endl;
-  // for(int i = 0; i < 88179845; i++){
-  //   cout << i << " " << dist[i] << endl;
-  // }
+   freopen("data.txt", "r", stdin);
+   cout << (int)dist.size() << endl;
+   for(int i = 0; i < 88179845; i++){
+    cout << i << " " << dist[i] << endl;
+  }
 }
