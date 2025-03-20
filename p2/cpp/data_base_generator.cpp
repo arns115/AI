@@ -421,8 +421,8 @@ int main(){
     }
   }
   cout << cnt << endl;
-   freopen("data.txt", "r", stdin);
-   cout << (int)dist.size() << endl;
+   freopen("data.txt", "w", stdout);
+  // cout << (int)dist.size() << endl;
    for(int i = 0; i < 88179845; i++){
     cout << i << " " << dist[i] << endl;
   }

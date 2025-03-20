@@ -389,11 +389,26 @@ bool end(const vector<int> &cur, const vector<int> &initial_cube){
   return (cur == initial_cube);
 }
 
-// pattern database
-int heuristic(vector<int> cur, const vector<short> &dist) {
-	int ind = calc_corners_index(cur);
-//	cout << ind << " " << dist[ind] << endl;
-	return dist[ind];
+int coords_dif(int i, int j){
+  int a = i / 9;
+  int b = i % 9;
+  int c = b / 3;
+  int d = b % 3;
+  int w = j / 9;
+  int x = j % 9;
+  int y = x / 3;
+  int z = x % 3;
+  return abs(a - w) + abs(c - y) + abs(d - z);
+}
+
+// manhattan distance
+int heuristic(const vector<int> &cur) {
+  int res = 0;
+  for (int i = 0; i < 54; i++) {
+    //res += coords_dif(i, cur[i]);
+    if(i != cur[i]) res++;
+  }
+  return res;
 }
 
 vector<string> split(const string& str, char delimiter) {
@@ -424,30 +439,19 @@ struct VectorHasher {
 
 
 int main() {
- ios_base::sync_with_stdio(false); cin.tie(NULL);	
   vector<int> initial_state(54);
   for(int i = 0; i < 54; i++){
     initial_state[i] = i;
   }
-  for(int i = 2; i < 15; i++){
-	factorial[i] = factorial[i - 1] * i;
-  }
   vector<int> scrambled = initial_state;
-	freopen("data_clean.txt", "r", stdin);
-	vector<short> dist(88179845);
-	for(int i = 0; i < 88179845; i++){
-		cin >> dist[i];
-	}
-	fclose(stdin);
-	cout << "done" << endl;
+
   freopen("input.txt", "r", stdin);
-  cin.clear();
+  freopen("output.txt", "w", stdout);
   // ifstream input("input.txt");
   // string n; 
   // std::getline(input, n);
   // vector<string> s = split(n, ' ');
-  int n; cin >> n;
-  //cout << n << endl;
+  int n; cin >> n;;
   vector<string>s(n);
   for(int i = 0; i < n; i++){
     cin >> s[i];
@@ -490,28 +494,27 @@ int main() {
   }
   //hash for the visited states and to reconstruct the answer
   unordered_map<vector<int>, pair<vector<int>, string>, VectorHasher> pre;
+  
   //map<vector<int>, pair<vector<int>, string>> pre;
-  priority_queue<tuple<int, int, int, vector<int>>> pq;
-  pq.push({0, 0, 0, scrambled});
+  
+  priority_queue<tuple<int, vector<int>>> pq;
+  pq.push({-heuristic(scrambled), scrambled});
   while((int)pq.size()){
-    auto [distanceF, distanceG, distanceH, cur] = pq.top();
+    auto [dist, cur] = pq.top();
     pq.pop();
-    distanceF = -distanceF;
-   // cout << distanceF << " ";
-   // cout << distanceG << " " << distanceH <<  endl;
+    dist = -dist;
+    dist -= heuristic(cur);
     bool finished = end(cur, initial_state);
     auto possible_moves = moves(cur);
-  // cout << distanceH << endl;
-    if(finished) break;
-    for(auto [move, rotation1]: possible_moves){
+    for(auto [move, rotation]: possible_moves){
       if(pre.count(move)) continue;
-      pre[move] = {cur, rotation1};
+      int heuristic_cost = heuristic(move);
+      pre[move] = {cur, rotation};
+      pq.push({-(heuristic_cost + dist + 1), move});
       if(end(move, initial_state)){
-	finished = 1;
-	break;
+        finished = 1;
+        break;
       }
-      int heuristic_cost = heuristic(move, dist);
-      pq.push({-(heuristic_cost + distanceG + 1), distanceG + 1, heuristic_cost, move});
     }
     if(finished) break;
   }
@@ -545,7 +548,6 @@ int main() {
   }
   reverse(sol.begin(), sol.end());
   //cout << (int)sol.size() << endl;
-  freopen("output.txt", "w", stdout);
   for (string rotation:sol) cout << rotation <<  endl;
 }
 
